@@ -1,0 +1,13 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: docker
+platforms:
+  - name: instance
+    image: registry.access.redhat.com/ubi9/ubi
+    pre_build_image: true
+provisioner:
+  name: ansible
+verifier:
+  name: ansible

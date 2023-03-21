@@ -1,0 +1,6 @@
+---
+# defaults file for ansible_role_lustre
+
+whamcloud_repo_baseurl: "https://downloads.whamcloud.com/public/lustre/latest-release/el9.0/client/"
+
+ib_interface: "ibp59s0"
