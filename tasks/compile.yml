@@ -1,0 +1,90 @@
+---
+# tasks file for compiling lustre from source
+
+
+  - name: Install various dependencies 
+    ansible.builtin.dnf:
+        name:
+          - '@Development Tools'
+          - 'mpitests-openmpi.x86_64'
+          - 'openmpi-devel'
+          - 'audit-libs-devel'
+          - 'binutils-devel'
+          - 'elfutils-devel'
+          - 'kabi-dw'
+          - 'ncurses-devel'
+          - 'newt-devel'
+          - 'numactl-devel'
+          - 'openssl-devel'
+          - 'pciutils-devel'
+          - 'perl'
+          - 'perl-devel'
+          - 'xmlto'
+          - 'xz-devel'
+          - 'elfutils-libelf-devel'
+          - 'libcap-devel'
+          - 'libcap-ng-devel'
+          - 'llvm-toolset'
+          - 'kernel-rpm-macros'
+          - 'keyutils-libs-devel'
+          - 'keyutils'
+          - 'libmount'
+          - 'libmount-devel'
+          - 'libnl3-devel'
+          - 'libnl3'
+          - 'kernel-abi-stablelists'
+          - 'kernel-headers'
+          - 'kernel-devel'
+          - 'kernel-core'
+
+  - name: Install more dependencies from "crb" repo
+    ansible.builtin.dnf:
+        name:
+          - 'libyaml'
+          - 'libyaml-devel'
+        enablerepo: crb
+
+
+  - name: "git checkout lustre sources"
+    ansible.builtin.git:
+        dest: "{{lustre_compilation_folder}}"
+        force: true
+        repo: "{{lustre_src_git_repo}}"
+        version: "{{lustre_src_git_version}}"
+
+
+  - name: Remove configure in order to run autogen.sh
+    ansible.builtin.file:
+      path: "{{lustre_compilation_folder}}/configure"
+      state: absent
+
+  - name: Remove Makefile in order to run configure
+    ansible.builtin.file:
+      path: "{{lustre_compilation_folder}}/Makefile"
+      state: absent
+
+  - name: autogen configure
+    ansible.builtin.command:
+        cmd: sh autogen.sh
+        creates: configure
+        chdir: "{{lustre_compilation_folder}}"
+
+
+  - name: configure to create Makefile
+    ansible.builtin.command:
+        cmd: "./configure {{lustre_configure_parameters}}"
+        chdir: "{{lustre_compilation_folder}}"
+        creates: Makefile
+
+
+  - name: make clean
+    make:
+        chdir: "{{lustre_compilation_folder}}"
+        target: "clean"
+
+  - name: make rpms
+    make:
+        chdir: "{{lustre_compilation_folder}}"
+        target: "rpms"
+
+

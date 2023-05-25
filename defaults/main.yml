@@ -1,6 +1,29 @@
 ---
 # defaults file for ansible_role_lustre
 
-whamcloud_repo_baseurl: "https://downloads.whamcloud.com/public/lustre/latest-release/el9.0/client/"
+lustre_rpm_repo:
+  baseurl: "https://downloads.whamcloud.com/public/lustre/latest-release/el9.0/client/"
+  name: whamcloud_lustre
+  description: whamcloud lustre client RPMs
+  gpgcheck: no
 
 ib_interface: "ibp59s0"
+
+lustre_compilation_folder: /root/lustre_compilation
+#lustre_configure_parameters: "--enable-dist --disable-server --enable-client --enable-crypto=no --disable-utils"
+lustre_configure_parameters: "--disable-server --with-o2ib --disable-tests"
+
+
+
+
+#Cray/HP repo
+#lustre_src_git_repo: 'https://github.com/Cray/lustre.git'
+#lustre_src_git_version: "cray-2.15.B03"
+
+# Wham cloud repo
+#lustre_src_git_repo: 'git://git.whamcloud.com/fs/lustre-release.git'
+#lustre_src_git_version: "v2_15_2"
+
+# Github mirror of whamcloud repo
+lustre_src_git_repo: https://github.com/lustre/lustre-release.git
+lustre_src_git_version: "b2_15"

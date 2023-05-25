@@ -2,39 +2,10 @@
 # tasks file for ansible_role_lustre
 
 
-- name: Add whamcloud lustre dnf repository
-  ansible.builtin.yum_repository:
-    name: whamcloud_lustre
-    description: whamcloud lustre client RPMs
-    baseurl: "{{whamcloud_repo_baseurl}}"
-    gpgcheck: no
+- name: Compile Lustre
+  ansible.builtin.include: compile.yml
+  when: true
 
-
-- name: Install lustre client with dnf
-  ansible.builtin.dnf:
-    name: lustre-client
-    state: latest
-
-
-
-# THE FOLLOWING MUST GO TO INFINIBAND ROLE
-#- name: Add kernel module: ib_umad
-#  community.general.modprobe:
-#    name: ib_umad
-#    state: present
-#    persistent: present
-#
-#- name: Add kernel module: rdma_ucm
-#  community.general.modprobe:
-#    name: rdma_ucm
-#    state: present
-#    persistent: present
-#
-#- name: Add kernel module: lustre
-#  community.general.modprobe:
-#    name: lustre
-#    state: present
-#    persistent: present
-#    params: 'options lnet networks="o2ib0({{ib_interface}})"
-#options ko2iblnd peer_credits=16 credits=2048 ntx=2048'
-
+- name: Install RPMs
+  ansible.builtin.include: install_binary_rpms.yml
+  when: false

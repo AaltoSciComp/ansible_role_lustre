@@ -1,11 +1,13 @@
 ---
 dependency:
   name: galaxy
+#  options:
+#    requirements-file: requirements.yml
 driver:
-  name: docker
+  name: podman
 platforms:
-  - name: instance
-    image: registry.access.redhat.com/ubi9/ubi
+  - name: instance-rocky
+    image: docker.io/rockylinux/rockylinux:9.2
     pre_build_image: true
 provisioner:
   name: ansible
