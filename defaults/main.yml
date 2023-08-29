@@ -27,3 +27,10 @@ lustre_configure_parameters: "--disable-server --with-o2ib --disable-tests"
 # Github mirror of whamcloud repo
 lustre_src_git_repo: https://github.com/lustre/lustre-release.git
 lustre_src_git_version: "b2_15"
+
+
+lustre_mounts:
+ - { path: "/scratch", src: "10.11.12.13@o2ib:10.11.12.14@o2ib:/lustr" }
+
+lustre_mount_opts: []
+lustre_mount_state: mounted

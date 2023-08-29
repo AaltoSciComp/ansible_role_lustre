@@ -1,0 +1,27 @@
+---
+
+
+- name: Add kernel module lustre
+  community.general.modprobe:
+    name: lustre
+    state: present
+    persistent: present
+    params: 'options lnet networks="o2ib0({{ib_interface}})"'
+  tags: ['notest']
+
+- name: Create the /scratch directory if it does not exist
+  ansible.builtin.file:
+    path: /scratch
+    state: directory
+    mode: '0755'
+
+- name: Add Lustre entry to /etc/fstab, make sure it is mounted
+  ansible.posix.mount:
+    fstype: lustre
+    path: "{{ item.path }}"
+    src: "{{ item.src }}"
+    opts: "{{ item.opts | default(lustre_mount_opts) | join(',') }}"
+    state: "{{ lustre_mount_state }}"
+  loop: "{{ lustre_mounts }}"
+  when: lustre_mounts is defined
+  tags: ['notest']

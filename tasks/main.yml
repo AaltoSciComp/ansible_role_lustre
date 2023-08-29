@@ -5,7 +5,15 @@
 - name: Compile Lustre
   ansible.builtin.include: compile.yml
   when: true
+  tags: ["compile"]
 
 - name: Install RPMs
   ansible.builtin.include: install_binary_rpms.yml
   when: false
+  tags: ["install"]
+
+
+- name: mount lustre filesystem
+  ansible.builtin.include: mount.yml
+  when: false
+  tags: ["mount"]
