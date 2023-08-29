@@ -28,6 +28,7 @@ lustre_configure_parameters: "--disable-server --with-o2ib --disable-tests"
 lustre_src_git_repo: https://github.com/lustre/lustre-release.git
 lustre_src_git_version: "b2_15"
 
+lustre_lnet_networks: "o2ib0({{ ib_interface }})"
 
 lustre_mounts:
  - { path: "/scratch", src: "10.11.12.13@o2ib:10.11.12.14@o2ib:/lustr" }

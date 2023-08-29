@@ -8,12 +8,30 @@
     persistent: present
     params: 'options lnet networks="o2ib0({{ib_interface}})"'
   tags: ['notest']
+  when:
+  - ansible_connection != 'chroot'
+  - ansible_connection != 'docker'
+  - ansible_connection != 'podman'
 
-- name: Create the /scratch directory if it does not exist
+- name: Lustre modprobe.d confings
+  template:
+    src: lustre.conf.j2
+    dest: /etc/modprobe.d/lustre.conf
+    owner: root
+    group: root
+    mode: 0644
+  when: ( lustre_lnet_networks is defined or lustre_modprobe_options is defined ) and ( ansible_connection == 'chroot' or ansible_connection == 'docker' or ansible_connection == 'podman' )
+
+
+
+- name: Create the mount target directory if it does not exist
   ansible.builtin.file:
-    path: /scratch
+    path: "{{ item.path }}"
     state: directory
     mode: '0755'
+  loop: "{{ lustre_mounts }}"
+  when: lustre_mounts is defined
+
 
 - name: Add Lustre entry to /etc/fstab, make sure it is mounted
   ansible.posix.mount:
