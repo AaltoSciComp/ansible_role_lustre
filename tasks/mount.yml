@@ -8,10 +8,7 @@
     persistent: present
     params: 'options lnet networks="o2ib0({{ib_interface}})"'
   tags: ['notest']
-  when:
-  - ansible_connection != 'chroot'
-  - ansible_connection != 'docker'
-  - ansible_connection != 'podman'
+  when:  ansible_connection != 'chroot' and ansible_connection != 'docker' and  ansible_connection != 'podman'
 
 - name: Lustre modprobe.d confings
   template:
