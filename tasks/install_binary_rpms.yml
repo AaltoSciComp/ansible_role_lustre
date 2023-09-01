@@ -8,12 +8,13 @@
     description: "{{lustre_rpm_repo.description}}"
     baseurl: "{{lustre_rpm_repo.baseurl}}"
     gpgcheck: "{{lustre_rpm_repo.gpgcheck}}"
-
+  tags: ['lustre']
 
 - name: Install lustre client with dnf
   ansible.builtin.dnf:
     name: lustre-client
     state: latest
+  tags: ['lustre']
 
 
 

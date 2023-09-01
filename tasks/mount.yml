@@ -1,13 +1,11 @@
 ---
 
-
 - name: Add kernel module lustre
   community.general.modprobe:
     name: lustre
     state: present
     persistent: present
-    params: 'options lnet networks="o2ib0({{ib_interface}})"'
-  tags: ['notest']
+  tags: ['notest','lustre']
   when:  (not 'chroot' in ansible_connection)  and (not 'docker' in ansible_connection ) and (not 'podman' in ansible_connection )
 
 - name: Lustre modprobe.d confings
@@ -17,8 +15,8 @@
     owner: root
     group: root
     mode: 0644
-  when: ( lustre_lnet_networks is defined or lustre_modprobe_options is defined ) and ('chroot' in ansible_connection or 'docker' in ansible_connection or 'podman'  in ansible_connection  )
-
+  when: ( lustre_lnet_networks is defined or lustre_modprobe_options is defined )
+  tags: ['lustre']
 
 
 - name: Create the mount target directory if it does not exist
@@ -28,6 +26,7 @@
     mode: '0755'
   loop: "{{ lustre_mounts }}"
   when: lustre_mounts is defined
+  tags: ['lustre']
 
 
 - name: Add Lustre entry to /etc/fstab, make sure it is mounted
@@ -39,4 +38,4 @@
     state: "{{ lustre_mount_state }}"
   loop: "{{ lustre_mounts }}"
   when: lustre_mounts is defined
-  tags: ['notest']
+  tags: ['notest','lustre']
