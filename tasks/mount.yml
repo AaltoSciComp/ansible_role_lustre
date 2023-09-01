@@ -1,6 +1,6 @@
 ---
 
-- name: Add kernel module lustre
+- name: Add kernel module lustre ( live server )
   community.general.modprobe:
     name: lustre
     state: present
@@ -8,8 +8,29 @@
   tags: ['notest','lustre']
   when:  (not 'chroot' in ansible_connection)  and (not 'docker' in ansible_connection ) and (not 'podman' in ansible_connection )
 
+- name: container kernel module management
+  block:
+  - name: Create the modules-load.d folder for lustre.conf
+    ansible.builtin.file:
+      path: /etc/modules-load.d/
+      state: directory
+      mode: '0755'
+  - name: Add kernel module lustre ( container )
+    ansible.builtin.blockinfile:
+      path: /etc/modules-load.d/lustre.conf
+      block: "lustre"
+      create: true
+      marker: "# {mark} ANSIBLE MANAGED BLOCK in ansible_role_lustre task mount"
+  - name: Create the modprobe.d folder for lustre.conf
+    ansible.builtin.file:
+      path: /etc/modprobe.d/
+      state: directory
+      mode: '0755'
+  when:  ('chroot' in ansible_connection)  or ('docker' in ansible_connection ) or ( 'podman' in ansible_connection )
+  tags: ['lustre']
+
 - name: Lustre modprobe.d confings
-  template:
+  ansible.builtin.template:
     src: lustre.conf.j2
     dest: /etc/modprobe.d/lustre.conf
     owner: root
