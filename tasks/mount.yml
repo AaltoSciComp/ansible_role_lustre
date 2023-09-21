@@ -1,13 +1,5 @@
 ---
 
-- name: Add kernel module lustre ( live server )
-  community.general.modprobe:
-    name: lustre
-    state: present
-    persistent: present
-  tags: ['notest','lustre']
-  when:  (not 'chroot' in ansible_connection)  and (not 'docker' in ansible_connection ) and (not 'podman' in ansible_connection )
-
 - name: container kernel module management
   block:
   - name: Create the modules-load.d folder for lustre.conf
@@ -26,6 +18,10 @@
       path: /etc/modprobe.d/
       state: directory
       mode: '0755'
+  - name: Ensure lnet service is enabled
+    ansible.builtin.systemd:
+      name: lnet
+      enabled: true
   when:  ('chroot' in ansible_connection)  or ('docker' in ansible_connection ) or ( 'podman' in ansible_connection )
   tags: ['lustre']
 
@@ -38,6 +34,26 @@
     mode: 0644
   when: ( lustre_lnet_networks is defined or lustre_modprobe_options is defined )
   tags: ['lustre']
+
+
+
+- name: live server kernel module management
+  block:
+  - name: Add kernel module lustre ( live server )
+    community.general.modprobe:
+      name: lustre
+      state: present
+      persistent: present
+    tags: ['notest','lustre']
+
+  - name: Ensure lnet service is enabled and running
+    ansible.builtin.systemd:
+      name: lnet
+      state: started
+      enabled: true
+  when:  (not 'chroot' in ansible_connection)  and (not 'docker' in ansible_connection ) and (not 'podman' in ansible_connection )
+
+
 
 
 - name: Create the mount target directory if it does not exist
