@@ -1,0 +1,23 @@
+#!/bin/bash
+
+INTERFACE={{ ib_interface }}
+
+echo loading lnet kernel module
+/usr/sbin/modprobe lnet
+echo loading lustre kernel module
+/usr/sbin/modprobe lustre
+
+echo checking for lnet network for ${INTERFACE}
+if /usr/sbin/lnetctl net show | grep -q "${INTERFACE}"; then
+    echo "LNET network for ${INTERFACE} already exists"
+else
+    echo "Creating LNET network for ${INTERFACE}"
+    /usr/sbin/lnetctl net add --net o2ib --if ${INTERFACE}
+fi
+
+{% for mount in lustre_mounts %}
+FILESYSTEM={{ mount.path }}
+echo mounting ${FILESYSTEM}
+/usr/bin/mount ${FILESYSTEM}
+
+{% endfor %}

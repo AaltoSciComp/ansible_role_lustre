@@ -22,6 +22,7 @@
     ansible.builtin.systemd:
       name: lnet
       enabled: true
+    tags: ['notest']
   when:  ('chroot' in ansible_connection)  or ('docker' in ansible_connection ) or ( 'podman' in ansible_connection )
   tags: ['lustre']
 
@@ -54,6 +55,30 @@
   when:  (not 'chroot' in ansible_connection)  and (not 'docker' in ansible_connection ) and (not 'podman' in ansible_connection )
 
 
+- name: Create the mount-lustre.sh script
+  ansible.builtin.template:
+    src: mount-lustre.sh.j2
+    dest: /usr/local/sbin/mount-lustre.sh
+    owner: root
+    group: root
+    mode: 0744
+  #when: ( lustre_lnet_networks is defined or lustre_modprobe_options is defined )
+  tags: ['lustre']
+
+- name: Create the system service lustre-mount.service
+  ansible.builtin.template:
+    src: lustre-mount.service.j2
+    dest: /etc/systemd/system/lustre-mount.service
+    owner: root
+    group: root
+    mode: 0644
+  #when: ( lustre_lnet_networks is defined or lustre_modprobe_options is defined )
+  tags: ['lustre']
+
+- name: Ensure lustre-mount.service is enabled
+  ansible.builtin.systemd:
+    name: lustre-mount.service
+    enabled: true
 
 
 - name: Create the mount target directory if it does not exist

@@ -1,0 +1,18 @@
+[Unit]
+Description=Mount the Lustre filesystems
+After=network-online.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/local/sbin/mount-lustre.sh
+{% for mount in lustre_mounts %}
+ExecStopPost=/usr/bin/umount {{ mount.path }}
+{% endfor %}
+ExecStopPost=/usr/sbin/lustre_rmmod
+# Yes, run lustre_rmmod twice
+ExecStopPost=/usr/sbin/lustre_rmmod
+TimeoutSec=120
+
+[Install]
+WantedBy=multi-user.target
