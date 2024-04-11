@@ -81,8 +81,8 @@
 
 - name: Create the system service infinibandup.service
   ansible.builtin.template:
-    src: inifinibandup.service.j2
-    dest: /etc/systemd/system/inifinibandup.service
+    src: infinibandup.service.j2
+    dest: /etc/systemd/system/infinibandup.service
     owner: root
     group: root
     mode: 0644
