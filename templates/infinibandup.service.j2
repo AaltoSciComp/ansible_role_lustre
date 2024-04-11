@@ -1,0 +1,10 @@
+[Unit]
+Description=Poll for infiniband status to be up
+
+[Service]
+Type=simple
+ExecStartPre=/usr/local/sbin/poll_ib_stat.sh
+ExecStart=/usr/bin/nmcli device show {{ ib_interface }}
+
+[Install]
+WantedBy=lnet.service

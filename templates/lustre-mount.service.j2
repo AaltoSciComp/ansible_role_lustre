@@ -1,6 +1,8 @@
 [Unit]
 Description=Mount the Lustre filesystems
 After=network-online.target
+Requires=lnet.service
+After=lnet.service
 
 [Service]
 Type=oneshot

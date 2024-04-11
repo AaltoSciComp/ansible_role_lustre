@@ -2,6 +2,8 @@
 
 INTERFACE={{ ib_interface }}
 
+echo unloading lustre modules
+/usr/sbin/lustre_rmmod
 echo loading lnet kernel module
 /usr/sbin/modprobe lnet
 echo loading lustre kernel module

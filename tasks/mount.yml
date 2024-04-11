@@ -7,12 +7,6 @@
       path: /etc/modules-load.d/
       state: directory
       mode: '0755'
-  - name: Add kernel module lustre ( container )
-    ansible.builtin.blockinfile:
-      path: /etc/modules-load.d/lustre.conf
-      block: "lustre"
-      create: true
-      marker: "# {mark} ANSIBLE MANAGED BLOCK in ansible_role_lustre task mount"
   - name: Create the modprobe.d folder for lustre.conf
     ansible.builtin.file:
       path: /etc/modprobe.d/
@@ -75,10 +69,49 @@
   #when: ( lustre_lnet_networks is defined or lustre_modprobe_options is defined )
   tags: ['lustre']
 
+- name: Create the poll_ib_stat.sh script
+  ansible.builtin.template:
+    src: poll_ib_stat.sh.j2
+    dest: /usr/local/sbin/poll_ib_stat.sh
+    owner: root
+    group: root
+    mode: 0744
+  #when: ( lustre_lnet_networks is defined or lustre_modprobe_options is defined )
+  tags: ['lustre']
+
+- name: Create the system service infinibandup.service
+  ansible.builtin.template:
+    src: inifinibandup.service.j2
+    dest: /etc/systemd/system/inifinibandup.service
+    owner: root
+    group: root
+    mode: 0644
+  #when: ( lustre_lnet_networks is defined or lustre_modprobe_options is defined )
+  tags: ['lustre']
+
 - name: Ensure lustre-mount.service is enabled
   ansible.builtin.systemd:
     name: lustre-mount.service
     enabled: true
+
+
+- name: Ensure directory exists for lnet.service.d/override.conf
+  ansible.builtin.file:
+    path: /etc/systemd/system/lnet.service.d
+    state: directory
+    mode: 0755
+    owner: root
+    group: root
+
+- name: Create the systemd lnet.service.d/override.conf
+  ansible.builtin.template:
+    src: lnet.service.d_override.conf.j2
+    dest: /etc/systemd/system/lnet.service.d/override.conf
+    owner: root
+    group: root
+    mode: 0644
+  #when: ( lustre_lnet_networks is defined or lustre_modprobe_options is defined )
+  tags: ['lustre']
 
 
 - name: Create the mount target directory if it does not exist

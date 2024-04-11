@@ -1,0 +1,35 @@
+#!/bin/bash
+
+INTERFACE={{ ib_interface }}
+
+# Loop until the conditions are met
+while true; do
+{#
+    ## Run ibstat and capture its output
+    #ibstat_output=$(/usr/sbin/ibstat 2>/dev/null)
+    #
+    ## Check if the output contains both strings
+    #if [[ $ibstat_output =~ "State: Active" ]] && [[ $ibstat_output =~ "Physical state: LinkUp" ]]; then
+    #    # If both strings are found, exit the loop
+    #    break
+    #fi
+#}
+
+    # Check with network manager if infiniband device is up already:
+    NMCLI_OUTPUT=$(nmcli --get-values GENERAL.STATE device show $INTERFACE | awk '{print $1}')
+
+    # Check if the variable is not empty and exactly "100"
+    if [ -n "$NMCLI_OUTPUT" ] && [ "$NMCLI_OUTPUT" = "100" ]; then
+        # exit the loop
+        break
+    #else
+        #echo "Variable is either empty or not exactly 100"
+    fi
+
+
+
+    # If conditions are not met, wait for a while before trying again
+    sleep 1
+done
+
+exit 0
