@@ -5,6 +5,7 @@ Description=Poll for infiniband status to be up
 Type=simple
 ExecStartPre=/usr/local/sbin/poll_ib_stat.sh
 ExecStart=/usr/bin/nmcli device show {{ ib_interface }}
+TimeoutStartSec={{ lustre_ibup_timeout }}
 
 [Install]
 WantedBy=lnet.service

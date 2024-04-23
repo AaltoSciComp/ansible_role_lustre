@@ -35,3 +35,7 @@ lustre_mounts:
 
 lustre_mount_opts: []
 lustre_mount_state: mounted
+
+
+# how long to wait for poll_ib_stat.sh to succeed (seconds)
+lustre_ibup_timeout: 300
