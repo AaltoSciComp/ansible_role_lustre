@@ -1,6 +1,9 @@
 ---
 # tasks file for compiling lustre from source
 
+  - name: Include the role
+    include_role:
+      name: ansible_role_epel
 
   - name: Install various dependencies 
     ansible.builtin.dnf:
