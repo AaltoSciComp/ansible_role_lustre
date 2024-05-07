@@ -35,3 +35,5 @@ lustre_mounts:
 
 lustre_mount_opts: []
 lustre_mount_state: mounted
+
+lustre_crb_repository: "codeready-builder-for-rhel-9-x86_64-rpms"

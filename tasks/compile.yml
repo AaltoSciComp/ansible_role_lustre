@@ -1,10 +1,6 @@
 ---
 # tasks file for compiling lustre from source
 
-  - name: Include the role
-    include_role:
-      name: ansible_role_epel
-
   - name: Install various dependencies 
     ansible.builtin.dnf:
         name:
@@ -45,7 +41,8 @@
         name:
           - 'libyaml'
           - 'libyaml-devel'
-        enablerepo: crb
+          - 'transfig'
+        enablerepo: "{{ lustre_crb_repository }}" # This can be a repository on the host
 
 
   - name: "git checkout lustre sources"
