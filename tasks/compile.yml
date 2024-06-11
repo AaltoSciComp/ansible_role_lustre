@@ -82,9 +82,20 @@
         chdir: "{{lustre_compilation_folder}}"
         target: "clean"
 
+  - name: set kernel version dependency
+    lineinfile:
+        path: "{{ lustre_compilation_folder }}/lustre.spec"
+        insertafter: "^BuildRoot:.*"
+        line: "{{ item }}"
+    with_items:
+        - "Requires: kernel == {{ target_kernel | regex_replace('\\.x86_64$', '') }}"
+        - "# Added by ansible_role_lustre"
+    when:
+        - target_kernel is defined
+
+
+
   - name: make rpms
     make:
         chdir: "{{lustre_compilation_folder}}"
         target: "rpms"
-
-
