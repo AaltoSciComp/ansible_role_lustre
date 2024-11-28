@@ -1,0 +1,8 @@
+{# This file is intentioned as a template for warewulf4 overlay  #}
+net:
+    - net type: o2ib
+      local NI(s):
+        - nid: {{ ib_ip_addr }}@o2ib
+          status: up
+          interfaces:
+              0: {{ ib_interface_lnet_conf }}
