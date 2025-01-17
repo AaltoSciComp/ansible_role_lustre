@@ -2,7 +2,11 @@
 # tasks file for compiling lustre from source
 
 
-  - name: Install various dependencies 
+  # This is the repo as seen by the host running the build container
+  - name: Enable codeready-builder-for-rhel-9-x86_64-rpms repository
+    command: dnf config-manager --enable codeready-builder-for-rhel-9-x86_64-rpms
+
+  - name: Install various dependencies
     ansible.builtin.dnf:
         name:
           - '@Development Tools'
@@ -32,17 +36,14 @@
           - 'libmount-devel'
           - 'libnl3-devel'
           - 'libnl3'
-          - 'kernel-abi-stablelists'
-          - 'kernel-headers'
-          - 'kernel-devel'
-          - 'kernel-core'
-
-  - name: Install more dependencies from "crb" repo
-    ansible.builtin.dnf:
-        name:
+          - 'kernel-abi-stablelists' # This package is valid for RHEL Minor Release lifetime: "With Red Hat Enterprise Linux 9, each minor release will have a unique stablelist that is valid throughout the minor release lifecycle. https://access.redhat.com/solutions/444773
+          - 'kernel-headers-{{ target_kernel }}'
+          - 'kernel-devel-{{ target_kernel }}'
+          - 'kernel-core-{{ target_kernel }}'
           - 'libyaml'
           - 'libyaml-devel'
-        enablerepo: crb
+          - 'transfig'
+
 
 
   - name: "git checkout lustre sources"

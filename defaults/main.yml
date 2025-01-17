@@ -13,7 +13,7 @@ ib_interface_mount_lustre: "{{ ib_interface }}" # this is separate for ww4 overl
 
 lustre_compilation_folder: /root/lustre_compilation
 #lustre_configure_parameters: "--enable-dist --disable-server --enable-client --enable-crypto=no --disable-utils"
-lustre_configure_parameters: "--disable-server --with-o2ib --disable-tests"
+lustre_configure_parameters: "--disable-server --with-o2ib --disable-tests {{ (' --with-o2ib=/usr/src/ofa_kernel/default/' if mofed | default(false) else '') }}"
 
 
 
