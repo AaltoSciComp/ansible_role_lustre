@@ -54,6 +54,25 @@
         version: "{{lustre_src_git_version}}"
 
 
+  - name: Copy any patches to the container
+    copy:
+      src: "{{ item }}"
+      dest: "{{ lustre_compilation_folder }}/{{ item | basename }}"
+    with_items: "{{ lustre_patches }}"
+    when:
+      - lustre_patches is defined
+      - lustre_patches | length > 0
+
+
+  - name: Apply any patches
+    shell: "patch -p1 < {{ item | basename}}"
+    args:
+      chdir: "{{ lustre_compilation_folder }}"
+    with_items: "{{ lustre_patches }}"
+    when:
+      - lustre_patches is defined
+      - lustre_patches | length > 0
+
   - name: Remove configure in order to run autogen.sh
     ansible.builtin.file:
       path: "{{lustre_compilation_folder}}/configure"
