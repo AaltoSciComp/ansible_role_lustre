@@ -10,6 +10,8 @@ lustre_rpm_repo:
 ib_interface: "ib0"
 ib_interface_lnet_conf: "{{ ib_interface }}"    # this is separate for ww4 overlay
 ib_interface_mount_lustre: "{{ ib_interface }}" # this is separate for ww4 overlay
+ib_interface_ibupservice: "{{ ib_interface }}"  # this is separate for ww4 overlay
+
 
 lustre_compilation_folder: /root/lustre_compilation
 #lustre_configure_parameters: "--enable-dist --disable-server --enable-client --enable-crypto=no --disable-utils"
