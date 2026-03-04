@@ -3,14 +3,14 @@
 
 
   # This is the repo as seen by the host running the build container
-  - name: Enable codeready-builder-for-rhel-9-x86_64-rpms repository
-    command: dnf config-manager --enable codeready-builder-for-rhel-9-x86_64-rpms
+  - name: Enable codeready-builder-for-rhel-9-<arch>-rpms repository
+    command: "dnf config-manager --enable codeready-builder-for-rhel-9-{{ kernel_arch }}-rpms"
 
   - name: Install various dependencies
     ansible.builtin.dnf:
         name:
           - '@Development Tools'
-          - 'mpitests-openmpi.x86_64'
+          - 'mpitests-openmpi'
           - 'openmpi-devel'
           - 'audit-libs-devel'
           - 'binutils-devel'

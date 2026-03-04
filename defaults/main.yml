@@ -39,3 +39,5 @@ lustre_mounts:
 
 lustre_mount_opts: []
 lustre_mount_state: mounted
+
+kernel_arch: "x86_64"
