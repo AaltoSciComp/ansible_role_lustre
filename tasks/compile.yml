@@ -108,7 +108,8 @@
         insertafter: "^BuildRoot:.*"
         line: "{{ item }}"
     with_items:
-        - "Requires: kernel == {{ target_kernel | regex_replace('\\.x86_64$', '') }}"
+        - "Requires: kernel%{?_isa} = {{ target_kernel | regex_replace('\\.(x86_64|aarch64)$', '') }}"
+        #- "Requires: kernel = {{ target_kernel | regex_replace('\\.(x86_64|aarch64)$', '') }}"
         - "# Added by ansible_role_lustre"
     when:
         - target_kernel is defined
