@@ -4,7 +4,7 @@
 
   # This is the repo as seen by the host running the build container
   - name: Enable codeready-builder-for-rhel-9-<arch>-rpms repository
-    command: "dnf config-manager --enable codeready-builder-for-rhel-9-{{ kernel_arch }}-rpms"
+    command: "dnf config-manager --enable {{ lustre_crb_repo }}"
 
   - name: Install various dependencies
     ansible.builtin.dnf:

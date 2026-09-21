@@ -18,7 +18,7 @@ lustre_compilation_folder: /root/lustre_compilation
 lustre_configure_parameters: "--disable-server --with-o2ib --disable-tests {{ (' --with-o2ib=/usr/src/ofa_kernel/default/' if ( ( mofed | default(false) ) | bool ) else '') }}"
 
 
-
+lustre_crb_repo: "codeready-builder-for-rhel-9-{{ kernel_arch }}-rpms"
 
 #Cray/HP repo
 #lustre_src_git_repo: 'https://github.com/Cray/lustre.git'
